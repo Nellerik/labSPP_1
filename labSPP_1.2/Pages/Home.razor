@@ -1,0 +1,45 @@
+﻿@page "/"
+@using System.Collections.Generic
+@using System.Net.Http.Json
+
+<PageTitle>Home</PageTitle>
+
+<h3>Информация о товаре</h3>
+
+@if (product == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div>
+        <img src="@product.ImageUrl" alt="Product Image" style="max-width: 200px; max-height: 200px;" />
+        <h4>@product.Name</h4>
+        <p>@product.Description</p>
+    </div>
+}
+
+@code {
+    private Product? product;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var httpClient = new HttpClient();
+        product = await httpClient.GetFromJsonAsync<Product>("https://example.com/api/product");
+
+        // product = new Product
+        // {
+        //     ImageUrl = "https://algo.by/media_images/site/l/v/i/videokarta-gigabyte-geforce-rtx-2060-super-windforce-oc-8gb-gddr6-gv-n206swf2oc-8gd-1.jpeg",
+        //     Name = "Видеокарта Gigabyte GeForce RTX 2060 Super WindForce",
+        //     Description = "8 ГБ GDDR6, 1470 МГц / 1680 МГц, 2176sp, 34 RT-ядер, трассировка лучей, 256 бит, 2 слота, питание 8 pin, HDMI, DisplayPort"
+        // };
+    }
+
+    public class Product
+    {
+        public string ImageUrl { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+}
